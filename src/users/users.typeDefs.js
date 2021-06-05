@@ -10,7 +10,9 @@ export default gql`
     phoneNumber: String!
     location: String
     avatarURL: String
+    stores: [Store]
     createdAt: String!
     updatedAt: String!
+    total_stores: Int!
   }
 `;

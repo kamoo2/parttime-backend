@@ -18,16 +18,64 @@ model User {
   password    String
   phoneNumber String   @unique
   location    String?
-  avatarURL   String?
+  avatarURL   String?  @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  stores      Store[]
 }
 
 model Store {
+  id          Int          @id @default(autoincrement())
+  store       String
+  storeNumber String       @unique
+  user        User         @relation(fields: [userId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  userId      Int
+  employees   Employee[]
+  category    Category     @relation(fields: [categoryId], references: [id])
+  categoryId  Int
+  photos      StorePhoto[]
+}
+
+model Category {
   id        Int      @id @default(autoincrement())
-  store     String
-  phone     String
-  wage      Int
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  stores    Store[]
+}
+
+model StorePhoto {
+  id        Int      @id @default(autoincrement())
+  photoURL  String   @unique
+  store     Store    @relation(fields: [storeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  storeId   Int
+}
+
+model Employee {
+  id          Int       @id @default(autoincrement())
+  name        String
+  age         Int
+  wage        Int
+  store       Store     @relation(fields: [storeId], references: [id])
+  phoneNumber String    @unique
+  avatarURL   String?   @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  storeId     Int
+  workdays    Workday[]
+}
+
+model Workday {
+  id         Int      @id @default(autoincrement())
+  year       Int
+  month      Int
+  day        Int
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  employeeId Int
 }
