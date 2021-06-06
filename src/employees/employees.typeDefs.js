@@ -12,6 +12,7 @@ export default gql`
     createdAt: String!
     updatedAt: String!
     workdays: [Workday]
+    salary: String!
   }
 
   type Workday {
@@ -19,7 +20,16 @@ export default gql`
     year: Int!
     month: Int!
     day: Int!
-    employee: Employee!
+    employees: [Employee]
+    workTime: WorkTime!
+    createdAt: String!
+    updatedAt: String!
+  }
+
+  type WorkTime {
+    id: Int!
+    time: Int!
+    workdays: [Workday]
     createdAt: String!
     updatedAt: String!
   }

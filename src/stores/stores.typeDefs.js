@@ -8,10 +8,11 @@ export default gql`
     user: User!
     createdAt: String!
     updatedAt: String!
-    employees: [Employee]
+    employees(page: Int): [Employee]
     category: Category!
     photos: [StorePhoto]
     total_employees: Int!
+    isMine: Boolean!
   }
   type Category {
     id: Int!
@@ -26,27 +27,6 @@ export default gql`
     id: Int!
     photoURL: String!
     store: Store!
-    createdAt: String!
-    updatedAt: String!
-  }
-  type Employee {
-    id: Int!
-    name: String!
-    age: Int!
-    wage: Int!
-    store: Store!
-    phoneNumber: String!
-    avatarURL: String
-    createdAt: String!
-    updatedAt: String!
-    workdays: [Workday]
-  }
-  type Workday {
-    id: Int!
-    year: Int!
-    month: Int!
-    day: Int!
-    employee: Employee!
     createdAt: String!
     updatedAt: String!
   }

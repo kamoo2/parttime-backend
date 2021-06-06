@@ -70,12 +70,21 @@ model Employee {
 }
 
 model Workday {
-  id         Int      @id @default(autoincrement())
+  id         Int        @id @default(autoincrement())
   year       Int
   month      Int
   day        Int
-  employee   Employee @relation(fields: [employeeId], references: [id])
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  employeeId Int
+  workTime   WorkTime   @relation(fields: [workTimeId], references: [id])
+  employees  Employee[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  workTimeId Int
+}
+
+model WorkTime {
+  id        Int       @id @default(autoincrement())
+  time      Int       @unique
+  workdays  Workday[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }

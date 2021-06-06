@@ -17,4 +17,31 @@ export default {
         skip: page ? (page - 1) * 10 : 0,
       }),
   },
+  Store: {
+    employees: ({ id }, { page }) => {
+      return client.employee.findMany({
+        where: {
+          storeId: id,
+        },
+        take: 10,
+        skip: page ? (page - 1) * 10 : 0,
+      });
+    },
+    total_employees: ({ id }) =>
+      client.employee.count({ where: { storeId: id } }),
+    isMine: async ({ id }, _, { loggedInUser }) => {
+      const storeBoss = await client.store
+        .findUnique({
+          where: {
+            id,
+          },
+        })
+        .user({
+          select: {
+            id: true,
+          },
+        });
+      return storeBoss.id === loggedInUser.id;
+    },
+  },
 };

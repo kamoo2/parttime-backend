@@ -2,7 +2,7 @@ import client from "../../client";
 
 export default {
   Query: {
-    seeProfile: async (_, { username }) =>
+    seeProfile: (_, { username }) =>
       client.user.findUnique({
         where: { username },
         include: { stores: true },
