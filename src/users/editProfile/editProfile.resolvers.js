@@ -1,7 +1,7 @@
 import { protectedResolver } from "../users.utils";
-import fs from "fs";
 import bcrypt from "bcrypt";
 import client from "../../client";
+import { uploadAvatar } from "../../shared/shared.utils";
 export default {
   Mutation: {
     editProfile: protectedResolver(
@@ -14,28 +14,54 @@ export default {
           password: newPassword,
           phoneNumber,
           location,
-          avatarURL,
+          file,
         },
         { loggedInUser }
       ) => {
         try {
           let addAvatarURL = null;
-          if (avatarURL) {
-            const { filename, createReadStream } = await avatarURL;
-            const readStream = createReadStream();
-            const uploadFileName = `${
-              loggedInUser.id
-            }-${Date.now()}-${filename}`;
-            const writeStream = fs.createWriteStream(
-              process.cwd() + "/uploads/" + uploadFileName
+          if (username) {
+            const existingUser = await client.user.findUnique({
+              where: {
+                username,
+              },
+            });
+            if (existingUser) {
+              throw new Error("중복된 username을 가진 User가 존재합니다.");
+            }
+          }
+          if (email) {
+            const existingUser = await client.user.findUnique({
+              where: {
+                email,
+              },
+            });
+            if (existingUser) {
+              throw new Error("중복된 email을 가진 User가 존재합니다.");
+            }
+          }
+          if (phoneNumber) {
+            const existingUser = await client.user.findUnique({
+              where: {
+                phoneNumber,
+              },
+            });
+            if (existingUser) {
+              throw new Error("중복된 phoneNumber을 가진 User가 존재합니다.");
+            }
+          }
+          if (file) {
+            addAvatarURL = await uploadAvatar(
+              file,
+              loggedInUser.id,
+              "UserAvatar"
             );
-            readStream.pipe(writeStream);
-            addAvatarURL = `http://localhost:4000/static/${uploadFileName}`;
           }
           let hashPassword = null;
           if (newPassword) {
             hashPassword = await bcrypt.hash(newPassword, 10);
           }
+
           await client.user.update({
             where: {
               id: loggedInUser.id,
@@ -57,7 +83,7 @@ export default {
         } catch (e) {
           return {
             ok: false,
-            error: e.message,
+            error: e.toString().slice(7),
           };
         }
       }

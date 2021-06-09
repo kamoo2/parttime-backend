@@ -1,5 +1,6 @@
 import client from "../../client";
 import { protectedResolver } from "../../users/users.utils";
+import { ZeroWorkdaysDelete } from "../employees.utils";
 
 export default {
   Mutation: {
@@ -15,6 +16,10 @@ export default {
               userId: true,
             },
           });
+          if (!boss) {
+            throw new Error("해당하는 가게가 존재하지 않습니다.");
+          }
+
           if (boss.userId !== loggedInUser.id) {
             throw new Error("당신의 가게가 아닙니다.");
           }
@@ -36,6 +41,9 @@ export default {
               id,
             },
           });
+
+          // 직원삭제 시 Workday에 연결된 직원이 없는 Workday 삭제하는 함수
+          await ZeroWorkdaysDelete();
 
           return {
             ok: true,

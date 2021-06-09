@@ -6,7 +6,7 @@ export default gql`
       store: String!
       storeNumber: String!
       category: String!
-      file: Upload
+      files: Upload!
     ): CommonResult!
   }
 `;

@@ -12,6 +12,7 @@ export default gql`
     category: Category!
     photos: [StorePhoto]
     total_employees: Int!
+    total_photos: Int!
     isMine: Boolean!
   }
   type Category {

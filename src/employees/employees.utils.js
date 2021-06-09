@@ -1,3 +1,5 @@
+import client from "../client";
+
 export const getFormatDate = () => {
   const todayDate = new Date().toLocaleString("ko-KR", {
     timeZone: "Asia/Seoul",
@@ -10,4 +12,27 @@ export const getFormatDate = () => {
     month: parseInt(month),
     day: parseInt(day),
   };
+};
+
+export const ZeroWorkdaysDelete = async () => {
+  const ZeroWorkdays = await client.workday.findMany({
+    where: {
+      employees: {
+        none: {},
+      },
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (ZeroWorkdays) {
+    ZeroWorkdays.map(async (workday) => {
+      await client.workday.delete({
+        where: {
+          id: workday.id,
+        },
+      });
+    });
+  }
 };

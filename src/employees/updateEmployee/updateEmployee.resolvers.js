@@ -4,36 +4,50 @@ import { protectedResolver } from "../../users/users.utils";
 
 export default {
   Mutation: {
-    createEmployee: protectedResolver(
+    updateEmployee: protectedResolver(
       async (
         _,
-        { name, age, wage, phoneNumber, storeId, file },
+        { id, name, age, wage, phoneNumber, file },
         { loggedInUser }
       ) => {
         try {
           let avatarURL = null;
-          const store = await client.store.findUnique({
-            where: {
-              id: storeId,
-            },
-          });
-          if (!store) {
-            throw new Error("해당하는 Store가 존재하지 않습니다.");
-          } else if (store.userId !== loggedInUser.id) {
-            throw new Error("해당 Store의 사장님이 아닙니다.");
+          // 직원의 가게 사장 ID
+          const ok = await client.employee
+            .findUnique({
+              where: {
+                id,
+              },
+            })
+            .store()
+            .user({ select: { id: true } });
+
+          // 조건 1. 해당하는 id의 직원이 존재하는지
+          if (!ok) {
+            throw new Error("해당하는 직원이 존재하지 않습니다.");
           }
 
+          // 조건 2. 직원이 존재하는데 사장의 id와 로그인 id가 일치하는지
+          if (ok.id !== loggedInUser.id) {
+            throw new Error("자기 직원의 정보만 수정가능합니다.");
+          }
+
+          // 조건 3. unique 필드를 edit할때 unique check
           if (phoneNumber) {
-            const exist = await client.employee.findUnique({
+            const uniqueCheck = await client.employee.findUnique({
               where: {
                 phoneNumber,
               },
+              select: {
+                id: true,
+              },
             });
-            if (exist) {
-              throw new Error("phoneNumber를 가진 User가 존재합니다.");
+            if (uniqueCheck) {
+              throw new Error("phoneNumber가 이미 존재합니다.");
             }
           }
 
+          // file이 들어왔을때 새로 S3에 업로드하고 URL 변경
           const shop = await client.employee
             .findUnique({
               where: {
@@ -50,18 +64,16 @@ export default {
             );
           }
 
-          await client.employee.create({
+          await client.employee.update({
+            where: {
+              id,
+            },
             data: {
               name,
               age,
               wage,
               phoneNumber,
               ...(avatarURL && { avatarURL }),
-              store: {
-                connect: {
-                  id: storeId,
-                },
-              },
             },
           });
           return {

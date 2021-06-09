@@ -13,7 +13,7 @@ export default gql`
       phoneNumber: String
       password: String
       location: String
-      avatarURL: Upload
+      file: Upload
     ): EditProfileResult!
   }
 `;
