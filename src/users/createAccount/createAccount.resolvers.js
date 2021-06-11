@@ -2,46 +2,38 @@ import client from "../../client";
 import bcrypt from "bcrypt";
 export default {
   Mutation: {
-    createAccount: async (
-      _,
-      { username, name, email, password, phoneNumber },
-      { loggedInUser }
-    ) => {
-      console.log(loggedInUser);
-      const existingUser = await client.user.findFirst({
-        where: {
-          OR: [
-            {
-              username,
-            },
-            {
-              email,
-            },
-            {
-              phoneNumber,
-            },
-          ],
-        },
-      });
-      if (existingUser) {
+    createAccount: async (_, { username, name, email, password }) => {
+      try {
+        if (username) {
+          const ok = await client.user.findUnique({ where: { username } });
+          if (ok) {
+            throw new Error("이미 존재하는 Username 입니다.");
+          }
+        }
+        if (email) {
+          const ok = await client.user.findUnique({ where: { email } });
+          if (ok) {
+            throw new Error("이미 존재하는 Email 입니다.");
+          }
+        }
+        const hashPassword = await bcrypt.hash(password, 10);
+        await client.user.create({
+          data: {
+            username,
+            name,
+            email,
+            password: hashPassword,
+          },
+        });
+        return {
+          ok: true,
+        };
+      } catch (err) {
         return {
           ok: false,
-          error: "중복되는 username email phoneNumber이 존재합니다.",
+          error: err.toString().slice(7),
         };
       }
-      const hashPassword = await bcrypt.hash(password, 10);
-      await client.user.create({
-        data: {
-          username,
-          name,
-          email,
-          phoneNumber,
-          password: hashPassword,
-        },
-      });
-      return {
-        ok: true,
-      };
     },
   },
 };

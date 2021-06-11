@@ -11,6 +11,8 @@ export default gql`
     employees(page: Int): [Employee]
     category: Category!
     photos: [StorePhoto]
+    holidays: [Holiday]
+    rules: [Rule]
     total_employees: Int!
     total_photos: Int!
     isMine: Boolean!

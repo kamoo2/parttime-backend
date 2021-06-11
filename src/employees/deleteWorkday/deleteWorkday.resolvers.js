@@ -63,7 +63,7 @@ export default {
           });
 
           // disconnect 후 workday에 연결된 employees가 없을때 해당 workday 삭제
-          await ZeroWorkdaysDelete();
+          ZeroWorkdaysDelete();
           return {
             ok: true,
           };

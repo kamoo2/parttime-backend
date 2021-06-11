@@ -43,7 +43,7 @@ export default {
           });
 
           // 직원삭제 시 Workday에 연결된 직원이 없는 Workday 삭제하는 함수
-          await ZeroWorkdaysDelete();
+          ZeroWorkdaysDelete();
 
           return {
             ok: true,

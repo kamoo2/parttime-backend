@@ -8,7 +8,7 @@ export default {
       if (!user) {
         return {
           ok: false,
-          error: "존재하지 않는 username입니다.",
+          error: "존재하지 않는 User입니다.",
         };
       }
       const loginOK = await bcrypt.compare(password, user.password);

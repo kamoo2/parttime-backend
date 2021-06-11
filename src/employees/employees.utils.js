@@ -15,24 +15,26 @@ export const getFormatDate = () => {
 };
 
 export const ZeroWorkdaysDelete = async () => {
-  const ZeroWorkdays = await client.workday.findMany({
+  await client.workday.deleteMany({
     where: {
       employees: {
         none: {},
       },
     },
-    select: {
-      id: true,
-    },
   });
+};
 
-  if (ZeroWorkdays) {
-    ZeroWorkdays.map(async (workday) => {
-      await client.workday.delete({
-        where: {
-          id: workday.id,
-        },
-      });
-    });
-  }
+export const CreateConnectObj = (str) => {
+  const strArr = str.replace(/(\s*)/g, "").toLowerCase().split(",");
+  const objArr = strArr.map((item) => {
+    return {
+      where: {
+        name: item,
+      },
+      create: {
+        name: item,
+      },
+    };
+  });
+  return objArr;
 };

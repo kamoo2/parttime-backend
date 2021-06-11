@@ -9,6 +9,10 @@ export default {
         },
         include: {
           user: true,
+          photos: true,
+          employees: true,
+          rules: true,
+          holidays: true,
         },
       }),
   },

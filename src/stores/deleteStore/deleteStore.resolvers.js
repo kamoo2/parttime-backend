@@ -1,5 +1,6 @@
 import client from "../../client";
 import { protectedResolver } from "../../users/users.utils";
+import { DeleteNoneRelated } from "../stores.utils";
 
 export default {
   Mutation: {
@@ -42,28 +43,21 @@ export default {
         });
 
         // store와 관련된 모든 객체 삭제 후 store 삭제(CASCADING DELETE)
-        const a = await client.$transaction([
-          deleteEmployees,
-          deletePhotos,
-          deleteStore,
-        ]);
-        console.log(a);
+        await client.$transaction([deleteEmployees, deletePhotos, deleteStore]);
 
         // store 삭제 후 해당 category의 관련 store가 없다면 그 category 삭제
 
-        const ok = await client.store.count({
+        await client.category.deleteMany({
           where: {
-            categoryId: store.categoryId,
+            stores: {
+              none: {},
+            },
           },
         });
 
-        if (ok === 0) {
-          await client.category.delete({
-            where: {
-              id: store.categoryId,
-            },
-          });
-        }
+        DeleteNoneRelated("category");
+        DeleteNoneRelated("rule");
+        DeleteNoneRelated("holiday");
 
         return {
           ok: true,

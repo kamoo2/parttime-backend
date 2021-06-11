@@ -1,13 +1,20 @@
 import client from "../../client";
+import { CreateConnectObj } from "../../employees/employees.utils";
 import { uploadStorePhotos } from "../../shared/shared.utils";
 import { protectedResolver } from "../../users/users.utils";
 
 export default {
   Mutation: {
     createStore: protectedResolver(
-      async (_, { store, storeNumber, category, files }, { loggedInUser }) => {
+      async (
+        _,
+        { store, storeNumber, category, files, rule, holiday },
+        { loggedInUser }
+      ) => {
         try {
           let photoUrls = [];
+          let ruleObjArr = [];
+          let holidayObjArr = [];
           const uniqueCheck = await client.store.findUnique({
             where: {
               storeNumber,
@@ -15,9 +22,13 @@ export default {
           });
 
           if (uniqueCheck) {
-            throw Error("이미 존재하는 storeNumber입니다.");
+            throw new Error("이미 존재하는 storeNumber입니다.");
           }
 
+          ruleObjArr = CreateConnectObj(rule);
+          holidayObjArr = CreateConnectObj(holiday);
+          console.log(ruleObjArr);
+          console.log(holidayObjArr);
           const newStore = await client.store.create({
             data: {
               store,
@@ -26,6 +37,9 @@ export default {
                 connect: {
                   id: loggedInUser.id,
                 },
+              },
+              rules: {
+                connectOrCreate: ruleObjArr,
               },
               category: {
                 connectOrCreate: {
@@ -36,6 +50,9 @@ export default {
                     name: category,
                   },
                 },
+              },
+              holidays: {
+                connectOrCreate: holidayObjArr,
               },
             },
           });

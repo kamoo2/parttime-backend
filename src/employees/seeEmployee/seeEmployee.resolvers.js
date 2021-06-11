@@ -18,7 +18,10 @@ export default {
           throw new Error("당신의 직원만 볼 수 있습니다.");
         }
 
-        const emp = await client.employee.findUnique({ where: { id } });
+        const emp = await client.employee.findUnique({
+          where: { id },
+          include: { workdays: true },
+        });
         return {
           ok: true,
           employee: emp,

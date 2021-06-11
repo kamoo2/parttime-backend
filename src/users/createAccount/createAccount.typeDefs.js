@@ -12,9 +12,6 @@ export default gql`
       email: String!
       name: String!
       password: String!
-      phoneNumber: String!
-      location: String
-      avatarURL: String
     ): CreateAccountResult!
   }
 `;
