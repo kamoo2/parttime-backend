@@ -39,7 +39,6 @@ export default {
           storeId: id,
         },
       }),
-
     total_employees: ({ id }) =>
       client.employee.count({ where: { storeId: id } }),
     isMine: async ({ id }, _, { loggedInUser }) => {
@@ -55,6 +54,10 @@ export default {
           },
         });
       return storeBoss.id === loggedInUser.id;
+    },
+    total_page: async ({ id }) => {
+      const count = await client.store.count({ where: {} });
+      return Math.ceil(count / 27);
     },
   },
 };

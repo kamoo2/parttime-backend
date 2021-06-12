@@ -7,7 +7,7 @@ export default gql`
     username: String!
     email: String!
     password: String!
-    phoneNumber: String!
+    phoneNumber: String
     location: String
     avatarURL: String
     stores: [Store]

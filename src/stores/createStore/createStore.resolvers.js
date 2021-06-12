@@ -15,18 +15,23 @@ export default {
           let photoUrls = [];
           let ruleObjArr = [];
           let holidayObjArr = [];
-          const uniqueCheck = await client.store.findUnique({
-            where: {
-              storeNumber,
-            },
-          });
 
-          if (uniqueCheck) {
-            throw new Error("이미 존재하는 storeNumber입니다.");
+          if (storeNumber) {
+            const ok = await client.store.findUnique({
+              where: { storeNumber },
+              select: { id: true },
+            });
+            if (ok) {
+              throw new Error("이미 존재하는 PhoneNumber 입니다.");
+            }
           }
 
-          ruleObjArr = CreateConnectObj(rule);
-          holidayObjArr = CreateConnectObj(holiday);
+          if (rule) {
+            ruleObjArr = CreateConnectObj(rule);
+          }
+          if (holiday) {
+            holidayObjArr = CreateConnectObj(holiday);
+          }
           console.log(ruleObjArr);
           console.log(holidayObjArr);
           const newStore = await client.store.create({
@@ -56,7 +61,6 @@ export default {
               },
             },
           });
-
           if (files) {
             photoUrls = await Promise.all(
               files.map(async (file) => {

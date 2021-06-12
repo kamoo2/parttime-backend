@@ -13,6 +13,7 @@ export default gql`
     photos: [StorePhoto]
     holidays: [Holiday]
     rules: [Rule]
+    total_page: Int!
     total_employees: Int!
     total_photos: Int!
     isMine: Boolean!
@@ -30,6 +31,21 @@ export default gql`
     id: Int!
     photoURL: String!
     store: Store!
+    createdAt: String!
+    updatedAt: String!
+  }
+
+  type Holiday {
+    id: Int!
+    name: String!
+    stores: [Store]
+    createdAt: String!
+    updatedAt: String!
+  }
+  type Rule {
+    id: Int!
+    name: String!
+    stores: [Store]
     createdAt: String!
     updatedAt: String!
   }

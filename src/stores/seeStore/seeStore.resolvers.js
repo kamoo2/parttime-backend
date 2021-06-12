@@ -2,18 +2,27 @@ import client from "../../client";
 
 export default {
   Query: {
-    seeStore: (_, { id }) =>
-      client.store.findUnique({
+    seeStore: async (_, { id }) => {
+      const store = await client.store.findUnique({
         where: {
           id,
         },
         include: {
           user: true,
-          photos: true,
-          employees: true,
           rules: true,
           holidays: true,
         },
-      }),
+      });
+      if (!store) {
+        return {
+          ok: false,
+          error: "존재하지 않는 스토어입니다.",
+        };
+      }
+      return {
+        ok: true,
+        store,
+      };
+    },
   },
 };

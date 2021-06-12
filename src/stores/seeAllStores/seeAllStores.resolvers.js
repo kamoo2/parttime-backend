@@ -9,9 +9,10 @@ export default {
           photos: true,
           holidays: true,
           rules: true,
+          category: true,
         },
-        take: 10,
-        skip: page ? (page - 1) * 10 : 0,
+        take: 27,
+        skip: page ? (page - 1) * 27 : 0,
       }),
   },
 };

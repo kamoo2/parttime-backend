@@ -34,13 +34,15 @@ export default {
             }
           }
 
-          const shop = await client.employee
-            .findUnique({
-              where: {
-                id,
-              },
-            })
-            .store({ select: { store: true, id: true } });
+          const shop = await client.store.findUnique({
+            where: {
+              id: storeId,
+            },
+            select: {
+              store: true,
+              id: true,
+            },
+          });
 
           if (file) {
             avatarURL = await uploadAvatar(
