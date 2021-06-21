@@ -27,7 +27,7 @@ export default {
               },
             });
             if (existingUser) {
-              throw new Error("중복된 username을 가진 User가 존재합니다.");
+              throw Error("중복된 username을 가진 User가 존재합니다.");
             }
           }
           if (email) {
@@ -37,7 +37,7 @@ export default {
               },
             });
             if (existingUser) {
-              throw new Error("중복된 email을 가진 User가 존재합니다.");
+              throw Error("중복된 email을 가진 User가 존재합니다.");
             }
           }
           if (phoneNumber) {
@@ -47,7 +47,7 @@ export default {
               },
             });
             if (existingUser) {
-              throw new Error("중복된 phoneNumber을 가진 User가 존재합니다.");
+              throw Error("중복된 phoneNumber을 가진 User가 존재합니다.");
             }
           }
           if (file) {
@@ -62,7 +62,7 @@ export default {
             hashPassword = await bcrypt.hash(newPassword, 10);
           }
 
-          await client.user.update({
+          const newUser = await client.user.update({
             where: {
               id: loggedInUser.id,
             },
@@ -79,6 +79,8 @@ export default {
 
           return {
             ok: true,
+            username: newUser.username,
+            avatarURL: newUser.avatarURL,
           };
         } catch (e) {
           return {

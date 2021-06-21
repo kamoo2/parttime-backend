@@ -6,6 +6,7 @@ export default gql`
       name: String!
       age: Int!
       wage: Int!
+      sex: String!
       phoneNumber: String!
       storeId: Int!
       file: Upload

@@ -19,6 +19,8 @@ export default {
           error: "존재하지 않는 스토어입니다.",
         };
       }
+
+      console.log(store);
       return {
         ok: true,
         store,

@@ -25,11 +25,11 @@ export default {
           });
 
           if (!ok) {
-            throw new Error("가게가 존재하지 않습니다.");
+            throw Error("가게가 존재하지 않습니다.");
           }
           // 로그인 유저와 가게 주인이 일치하는지 체크
           if (ok.userId !== loggedInUser.id) {
-            throw new Error("고객님 가게의 정보만 수정가능합니다.");
+            throw Error("고객님 가게의 정보만 수정가능합니다.");
           }
 
           // storeNumber 중복 체크
@@ -40,7 +40,7 @@ export default {
               },
             });
             if (exist) {
-              throw new Error("중복된 storeNumber입니다. 다시 입력해주세요.");
+              throw Error("중복된 storeNumber입니다. 다시 입력해주세요.");
             }
           }
 

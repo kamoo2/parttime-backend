@@ -11,3 +11,12 @@ export const DeleteNoneRelated = async (field) => {
     return;
   }
 };
+
+export const MakeTodayDateSlug = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+  const slug = `${year}-${month}-${day}`;
+  return slug;
+};

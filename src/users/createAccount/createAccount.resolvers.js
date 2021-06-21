@@ -7,13 +7,13 @@ export default {
         if (username) {
           const ok = await client.user.findUnique({ where: { username } });
           if (ok) {
-            throw new Error("이미 존재하는 Username 입니다.");
+            throw Error("이미 존재하는 Username 입니다.");
           }
         }
         if (email) {
           const ok = await client.user.findUnique({ where: { email } });
           if (ok) {
-            throw new Error("이미 존재하는 Email 입니다.");
+            throw Error("이미 존재하는 Email 입니다.");
           }
         }
         const hashPassword = await bcrypt.hash(password, 10);

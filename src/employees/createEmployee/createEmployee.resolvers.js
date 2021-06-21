@@ -7,7 +7,7 @@ export default {
     createEmployee: protectedResolver(
       async (
         _,
-        { name, age, wage, phoneNumber, storeId, file },
+        { name, age, wage, phoneNumber, sex, storeId, file },
         { loggedInUser }
       ) => {
         try {
@@ -57,6 +57,7 @@ export default {
               name,
               age,
               wage,
+              sex,
               phoneNumber,
               ...(avatarURL && { avatarURL }),
               store: {

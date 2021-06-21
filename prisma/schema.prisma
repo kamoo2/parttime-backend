@@ -38,6 +38,21 @@ model Store {
   photos      StorePhoto[]
   holidays    Holiday[]
   rules       Rule[]
+  sails       Sail[]
+}
+
+// 가게 매출 모델
+model Sail {
+  id        Int      @id @default(autoincrement())
+  year      Int
+  month     Int
+  day       Int
+  slug      String
+  sail      Int
+  store     Store    @relation(fields: [storeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  storeId   Int
 }
 
 model Holiday {
@@ -78,6 +93,7 @@ model Employee {
   name        String
   age         Int
   wage        Int
+  sex         String
   store       Store     @relation(fields: [storeId], references: [id])
   phoneNumber String    @unique
   avatarURL   String?   @unique
@@ -92,6 +108,7 @@ model Workday {
   year       Int
   month      Int
   day        Int
+  slug       String
   workTime   WorkTime   @relation(fields: [workTimeId], references: [id])
   employees  Employee[]
   createdAt  DateTime   @default(now())

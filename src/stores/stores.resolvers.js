@@ -1,4 +1,5 @@
 import client from "../client";
+import { MakeTodayDateSlug } from "./stores.utils";
 
 export default {
   Category: {
@@ -41,6 +42,56 @@ export default {
       }),
     total_employees: ({ id }) =>
       client.employee.count({ where: { storeId: id } }),
+    total_year_sail: async ({ id }) => {
+      let total = 0;
+      // 현재달 매출 확인
+      const now = new Date();
+      const year_sail = await client.sail.findMany({
+        where: {
+          storeId: id,
+          year: now.getFullYear(),
+        },
+        select: {
+          sail: true,
+        },
+      });
+
+      year_sail.forEach((sail) => (total += sail.sail));
+      return total;
+    },
+    total_month_sail: async ({ id }) => {
+      let total = 0;
+      // 현재달 매출 확인
+      const now = new Date();
+      const month_sail = await client.sail.findMany({
+        where: {
+          storeId: id,
+          year: now.getFullYear(),
+          month: now.getMonth() + 1,
+        },
+        select: {
+          sail: true,
+        },
+      });
+
+      month_sail.forEach((sail) => (total += sail.sail));
+      return total;
+    },
+    today_sail: async ({ id }) => {
+      let total = 0;
+      const slug = MakeTodayDateSlug();
+      console.log(slug);
+      const today_sail = await client.sail.findFirst({
+        where: {
+          storeId: id,
+          slug,
+        },
+        select: {
+          sail: true,
+        },
+      });
+      return today_sail ? today_sail.sail : 0;
+    },
     isMine: async ({ id }, _, { loggedInUser }) => {
       const storeBoss = await client.store
         .findUnique({
@@ -55,9 +106,16 @@ export default {
         });
       return storeBoss.id === loggedInUser.id;
     },
-    total_page: async ({ id }) => {
-      const count = await client.store.count({ where: {} });
-      return Math.ceil(count / 27);
+    total_page: async ({ id }, { take, home }, { loggedInUser }) => {
+      if (home) {
+        const count = await client.store.count({ where: {} });
+        return Math.ceil(count / take);
+      } else {
+        const count = await client.store.count({
+          where: { userId: loggedInUser.id },
+        });
+        return Math.ceil(count / take);
+      }
     },
   },
 };

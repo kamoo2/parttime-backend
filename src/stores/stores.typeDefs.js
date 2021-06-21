@@ -13,10 +13,25 @@ export default gql`
     photos: [StorePhoto]
     holidays: [Holiday]
     rules: [Rule]
-    total_page: Int!
+    sails: [Sail]
+    total_page(take: Int!, home: Boolean!): Int!
     total_employees: Int!
     total_photos: Int!
+    total_year_sail: Int!
+    total_month_sail: Int!
+    today_sail: Int!
     isMine: Boolean!
+  }
+  type Sail {
+    id: Int!
+    year: Int!
+    month: Int!
+    day: Int!
+    slug: String!
+    sail: Int!
+    store: Store!
+    createdAt: String!
+    updatedAt: String!
   }
   type Category {
     id: Int!

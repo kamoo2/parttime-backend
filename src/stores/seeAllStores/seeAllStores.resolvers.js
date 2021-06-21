@@ -11,8 +11,8 @@ export default {
           rules: true,
           category: true,
         },
-        take: 27,
-        skip: page ? (page - 1) * 27 : 0,
+        take: 9,
+        skip: page ? (page - 1) * 9 : 0,
       }),
   },
 };

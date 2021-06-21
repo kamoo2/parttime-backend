@@ -16,14 +16,12 @@ export default {
           let ruleObjArr = [];
           let holidayObjArr = [];
 
-          if (storeNumber) {
-            const ok = await client.store.findUnique({
-              where: { storeNumber },
-              select: { id: true },
-            });
-            if (ok) {
-              throw new Error("이미 존재하는 PhoneNumber 입니다.");
-            }
+          const ok = await client.store.findUnique({
+            where: { storeNumber },
+            select: { id: true },
+          });
+          if (ok) {
+            throw Error("이미 존재하는 PhoneNumber 입니다.");
           }
 
           if (rule) {
@@ -90,6 +88,7 @@ export default {
 
           return {
             ok: true,
+            store: newStore,
           };
         } catch (err) {
           return {

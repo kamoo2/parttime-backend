@@ -16,10 +16,10 @@ export default {
           },
         });
         if (!store) {
-          throw new Error("해당 가게가 존재하지 않습니다.");
+          throw Error("해당 가게가 존재하지 않습니다.");
         }
         if (store.userId !== loggedInUser.id) {
-          throw new Error("당신의 가게만 삭제할 수 있습니다.");
+          throw Error("당신의 가게만 삭제할 수 있습니다.");
         }
 
         // store과 관련된 모든 employee 삭제
@@ -46,14 +46,6 @@ export default {
         await client.$transaction([deleteEmployees, deletePhotos, deleteStore]);
 
         // store 삭제 후 해당 category의 관련 store가 없다면 그 category 삭제
-
-        await client.category.deleteMany({
-          where: {
-            stores: {
-              none: {},
-            },
-          },
-        });
 
         DeleteNoneRelated("category");
         DeleteNoneRelated("rule");

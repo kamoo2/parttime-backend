@@ -5,6 +5,7 @@ import express from "express";
 import logger from "morgan";
 import { resolvers, typeDefs } from "./schema";
 import { getUser } from "./users/users.utils";
+import cors from "cors";
 const apollo = new ApolloServer({
   typeDefs,
   resolvers,
@@ -19,6 +20,7 @@ const PORT = process.env.PORT;
 
 const app = express();
 app.use(logger("tiny"));
+app.use(cors());
 apollo.applyMiddleware({ app });
 
 app.listen({ port: PORT }, () => {

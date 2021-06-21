@@ -7,7 +7,7 @@ export default {
     updateEmployee: protectedResolver(
       async (
         _,
-        { id, name, age, wage, phoneNumber, file },
+        { id, name, age, wage, sex, phoneNumber, file },
         { loggedInUser }
       ) => {
         try {
@@ -73,6 +73,7 @@ export default {
               age,
               wage,
               phoneNumber,
+              sex,
               ...(avatarURL && { avatarURL }),
             },
           });

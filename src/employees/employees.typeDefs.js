@@ -4,6 +4,7 @@ export default gql`
   type Employee {
     id: Int!
     name: String!
+    sex: String!
     age: Int!
     wage: Int!
     store: Store!
@@ -32,19 +33,5 @@ export default gql`
     workdays: [Workday]
     createdAt: String!
     updatedAt: String!
-  }
-
-  type Holiday {
-    id: Int!
-    holiday: String!
-    stores: [Store]
-    createAt: String!
-    updatedAt: String!
-  }
-
-  type Rule {
-    id: Int!
-    rule: String!
-    stores: [Store]
   }
 `;

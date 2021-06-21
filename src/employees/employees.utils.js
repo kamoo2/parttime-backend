@@ -1,12 +1,10 @@
 import client from "../client";
 
 export const getFormatDate = () => {
-  const todayDate = new Date().toLocaleString("ko-KR", {
-    timeZone: "Asia/Seoul",
-  });
-  const year = todayDate.slice(0, 4);
-  const month = todayDate.slice(5, 7).replace(/(\s*)/g, "");
-  const day = todayDate.slice(8, 10).replace(/(\s*)/g, "");
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
   return {
     year: parseInt(year),
     month: parseInt(month),
