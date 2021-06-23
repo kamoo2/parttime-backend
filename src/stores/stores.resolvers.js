@@ -137,5 +137,6 @@ export default {
       return false;
     },
     likeCount: ({ id }) => client.like.count({ where: { storeId: id } }),
+    commentCount: ({ id }) => client.comment.count({ where: { storeId: id } }),
   },
 };

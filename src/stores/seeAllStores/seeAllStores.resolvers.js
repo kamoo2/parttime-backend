@@ -13,6 +13,11 @@ export default {
         },
         take: 9,
         skip: page ? (page - 1) * 9 : 0,
+        orderBy: [
+          {
+            createdAt: "asc",
+          },
+        ],
       }),
   },
 };

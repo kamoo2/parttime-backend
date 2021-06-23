@@ -22,6 +22,7 @@ export default gql`
     isMine: Boolean!
     isLiked: Boolean!
     likeCount: Int!
+    commentCount: Int!
   }
   type Like {
     id: Int!
