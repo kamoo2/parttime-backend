@@ -79,7 +79,7 @@ export default {
 
           return {
             ok: true,
-            username: newUser.username,
+            id: newUser.id,
             avatarURL: newUser.avatarURL,
           };
         } catch (e) {

@@ -1,4 +1,5 @@
 import client from "../../client";
+import { ZeroWorkdaysDelete } from "../../employees/employees.utils";
 import { protectedResolver } from "../../users/users.utils";
 import { DeleteNoneRelated } from "../stores.utils";
 
@@ -35,6 +36,11 @@ export default {
             storeId: id,
           },
         });
+        const deleteSails = client.sail.deleteMany({
+          where: {
+            storeId: id,
+          },
+        });
         // store 삭제
         const deleteStore = client.store.delete({
           where: {
@@ -43,10 +49,16 @@ export default {
         });
 
         // store와 관련된 모든 객체 삭제 후 store 삭제(CASCADING DELETE)
-        await client.$transaction([deleteEmployees, deletePhotos, deleteStore]);
+        await client.$transaction([
+          deleteEmployees,
+          deletePhotos,
+          deleteSails,
+          deleteStore,
+        ]);
 
         // store 삭제 후 해당 category의 관련 store가 없다면 그 category 삭제
 
+        ZeroWorkdaysDelete();
         DeleteNoneRelated("category");
         DeleteNoneRelated("rule");
         DeleteNoneRelated("holiday");

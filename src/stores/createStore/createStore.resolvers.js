@@ -30,8 +30,6 @@ export default {
           if (holiday) {
             holidayObjArr = CreateConnectObj(holiday);
           }
-          console.log(ruleObjArr);
-          console.log(holidayObjArr);
           const newStore = await client.store.create({
             data: {
               store,
@@ -71,7 +69,7 @@ export default {
             );
           }
 
-          Promise.all(
+          await Promise.all(
             photoUrls.map(async (url) => {
               await client.storePhoto.create({
                 data: {

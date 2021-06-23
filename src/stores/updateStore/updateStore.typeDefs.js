@@ -11,8 +11,10 @@ export default gql`
       id: Int!
       store: String
       storeNumber: String
-      files: Upload
+      files: [Upload]
       category: String
+      holiday: String
+      rule: String
     ): UpdateStoreResult!
   }
 `;

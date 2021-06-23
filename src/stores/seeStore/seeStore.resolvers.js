@@ -11,6 +11,8 @@ export default {
           user: true,
           rules: true,
           holidays: true,
+          category: true,
+          comments: true,
         },
       });
       if (!store) {
@@ -20,7 +22,6 @@ export default {
         };
       }
 
-      console.log(store);
       return {
         ok: true,
         store,

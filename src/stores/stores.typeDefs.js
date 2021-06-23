@@ -1,5 +1,4 @@
 import { gql } from "apollo-server-core";
-
 export default gql`
   type Store {
     id: Int!
@@ -21,6 +20,14 @@ export default gql`
     total_month_sail: Int!
     today_sail: Int!
     isMine: Boolean!
+    isLiked: Boolean!
+    likeCount: Int!
+  }
+  type Like {
+    id: Int!
+    store: Store!
+    createdAt: String!
+    updatedAt: String!
   }
   type Sail {
     id: Int!

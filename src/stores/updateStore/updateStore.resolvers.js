@@ -1,17 +1,21 @@
 import client from "../../client";
+import { CreateConnectObj } from "../../employees/employees.utils";
 import { uploadStorePhotos } from "../../shared/shared.utils";
 import { protectedResolver } from "../../users/users.utils";
+import { DeleteNoneRelated } from "../stores.utils";
 
 export default {
   Mutation: {
     updateStore: protectedResolver(
       async (
         _,
-        { id, store, storeNumber, category, files },
+        { id, store, storeNumber, category, files, holiday, rule },
         { loggedInUser }
       ) => {
         try {
           let photoUrls = [];
+          let ruleObjArr = [];
+          let holidayObjArr = [];
           const ok = await client.store.findFirst({
             where: {
               id,
@@ -38,10 +42,20 @@ export default {
               where: {
                 storeNumber,
               },
+              select: {
+                id: true,
+              },
             });
             if (exist) {
               throw Error("중복된 storeNumber입니다. 다시 입력해주세요.");
             }
+          }
+
+          if (rule) {
+            ruleObjArr = CreateConnectObj(rule);
+          }
+          if (holiday) {
+            holidayObjArr = CreateConnectObj(holiday);
           }
 
           // files가 존재할 때 files를 s3에 업로드하고 photo생성 후 연결
@@ -56,6 +70,7 @@ export default {
               })
             );
           }
+
           const newStore = await client.store.update({
             where: {
               id,
@@ -80,24 +95,32 @@ export default {
                   deleteMany: {},
                 },
               }),
+              ...(ruleObjArr.length > 0 && {
+                rules: {
+                  set: [],
+                  connectOrCreate: ruleObjArr,
+                },
+              }),
+              ...(holidayObjArr.length > 0 && {
+                holidays: {
+                  set: [],
+                  connectOrCreate: holidayObjArr,
+                },
+              }),
+            },
+            include: {
+              category: true,
+              holidays: true,
+              rules: true,
+              photos: true,
             },
           });
 
-          const relatedCountZero = await client.store.count({
-            where: {
-              categoryId: ok.categoryId,
-            },
-          });
+          DeleteNoneRelated("category");
+          DeleteNoneRelated("holiday");
+          DeleteNoneRelated("rule");
 
-          if (relatedCountZero === 0) {
-            await client.category.delete({
-              where: {
-                id: ok.categoryId,
-              },
-            });
-          }
-
-          if (relatedCountZero)
+          if (photoUrls.length > 0)
             Promise.all(
               photoUrls.map(async (url) => {
                 await client.storePhoto.create({

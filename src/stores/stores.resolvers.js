@@ -80,7 +80,6 @@ export default {
     today_sail: async ({ id }) => {
       let total = 0;
       const slug = MakeTodayDateSlug();
-      console.log(slug);
       const today_sail = await client.sail.findFirst({
         where: {
           storeId: id,
@@ -117,5 +116,26 @@ export default {
         return Math.ceil(count / take);
       }
     },
+    isLiked: async ({ id }, _, { loggedInUser }) => {
+      if (!loggedInUser) {
+        return false;
+      }
+      const ok = await client.like.findUnique({
+        where: {
+          storeId_userId: {
+            storeId: id,
+            userId: loggedInUser.id,
+          },
+        },
+        select: {
+          id: true,
+        },
+      });
+      if (ok) {
+        return true;
+      }
+      return false;
+    },
+    likeCount: ({ id }) => client.like.count({ where: { storeId: id } }),
   },
 };

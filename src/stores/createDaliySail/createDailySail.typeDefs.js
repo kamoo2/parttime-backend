@@ -6,6 +6,10 @@ export default gql`
     error: String
   }
   type Mutation {
-    createDailySail(storeId: Int!, sail: Int!): CreateDailySailResult!
+    createDailySail(
+      storeId: Int!
+      sail: Int!
+      dday: Int
+    ): CreateDailySailResult!
   }
 `;

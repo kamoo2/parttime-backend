@@ -4,7 +4,7 @@ export default gql`
   type EditProfileResult {
     ok: Boolean!
     error: String
-    username: String
+    id: Int
     avatarURL: String
   }
   type Mutation {

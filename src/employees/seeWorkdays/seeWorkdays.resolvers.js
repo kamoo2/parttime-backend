@@ -18,11 +18,9 @@ export default {
           });
 
         if (!emp) {
-          console.log("존재x직원");
           return [];
         }
         if (emp.userId !== loggedInUser.id) {
-          console.log("보스아님");
           return [];
         }
         const workdays = await client.workday.findMany({
@@ -37,7 +35,6 @@ export default {
             workTime: true,
           },
         });
-        console.log(workdays);
         return workdays;
       }
     ),

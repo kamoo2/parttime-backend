@@ -11,17 +11,19 @@ generator client {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String
-  username    String   @unique
-  email       String   @unique
+  username    String    @unique
+  email       String    @unique
   password    String
-  phoneNumber String?  @unique
+  phoneNumber String?   @unique
   location    String?
-  avatarURL   String?  @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  avatarURL   String?   @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   stores      Store[]
+  comments    Comment[]
+  likes       Like[]
 }
 
 model Store {
@@ -39,6 +41,32 @@ model Store {
   holidays    Holiday[]
   rules       Rule[]
   sails       Sail[]
+  likes       Like[]
+  comments    Comment[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  comment   String
+  user      User     @relation(fields: [userId], references: [id])
+  store     Store    @relation(fields: [storeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int
+  storeId   Int
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  store     Store    @relation(fields: [storeId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  storeId   Int
+  userId    Int
+
+
+  @@unique([storeId, userId])
 }
 
 // 가게 매출 모델

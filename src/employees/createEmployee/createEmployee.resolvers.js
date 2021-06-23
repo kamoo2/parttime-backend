@@ -30,7 +30,7 @@ export default {
               },
             });
             if (exist) {
-              throw new Error("phoneNumber를 가진 User가 존재합니다.");
+              throw new Error("중복되는 전화번호입니다.");
             }
           }
 

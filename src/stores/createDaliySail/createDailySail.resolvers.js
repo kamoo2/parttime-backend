@@ -4,7 +4,7 @@ import { protectedResolver } from "../../users/users.utils";
 export default {
   Mutation: {
     createDailySail: protectedResolver(
-      async (_, { storeId, sail }, { loggedInUser }) => {
+      async (_, { storeId, sail, dday }, { loggedInUser }) => {
         try {
           const existStore = await client.store.findUnique({
             where: { id: storeId },
@@ -18,12 +18,13 @@ export default {
           if (existStore.userId !== loggedInUser.id) {
             throw Error("자기 가게가 아닙니다.");
           }
-          console.log(typeof sail);
           const date = new Date();
           const year = date.getFullYear();
           const month = date.getMonth() + 1;
           const day = date.getDate();
-          const slug = `${year}-${month}-${day}`;
+          const slug = dday
+            ? `${year}-${month}-${dday}`
+            : `${year}-${month}-${day}`;
 
           const existSail = await client.sail.findFirst({
             where: {
@@ -46,7 +47,7 @@ export default {
             data: {
               year,
               month,
-              day,
+              ...(dday ? { day: dday } : { day: day }),
               slug,
               sail,
               store: {
