@@ -9,6 +9,7 @@ import cors from "cors";
 const apollo = new ApolloServer({
   typeDefs,
   resolvers,
+  playground: true,
   context: async ({ req }) => {
     return {
       loggedInUser: await getUser(req.headers["jwt-token"]),
