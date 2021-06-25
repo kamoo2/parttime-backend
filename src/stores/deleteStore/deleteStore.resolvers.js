@@ -41,6 +41,16 @@ export default {
             storeId: id,
           },
         });
+        const deleteLikes = client.like.deleteMany({
+          where: {
+            storeId: id,
+          },
+        });
+        const deleteComments = client.comment.deleteMany({
+          where: {
+            storeId: id,
+          },
+        });
         // store 삭제
         const deleteStore = client.store.delete({
           where: {
@@ -53,6 +63,8 @@ export default {
           deleteEmployees,
           deletePhotos,
           deleteSails,
+          deleteLikes,
+          deleteComments,
           deleteStore,
         ]);
 

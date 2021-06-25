@@ -70,9 +70,9 @@ export default {
             },
             data: {
               name,
-              age,
+              ...(age && { age }),
               wage,
-              phoneNumber,
+              ...(phoneNumber && { phoneNumber }),
               sex,
               ...(avatarURL && { avatarURL }),
             },
