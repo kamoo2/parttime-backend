@@ -13,7 +13,6 @@ export default gql`
     createdAt: String!
     updatedAt: String!
     workdays: [Workday]
-    salary: String!
   }
 
   type Workday {
